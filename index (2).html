@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VocabNote 中文</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --surface-2: #232323;
+    --border: #2a2a2a;
+    --border-strong: #3a3a3a;
+    --text: #ffffff;
+    --text-sub: #a0a0a0;
+    --text-mute: #6a6a6a;
+    --accent: #e63946;
+    --accent-hover: #ff5762;
+    --accent-dim: rgba(230, 57, 70, 0.15);
+    --accent-line: rgba(230, 57, 70, 0.3);
+    --danger: #e74c3c;
+    --danger-dim: rgba(231, 76, 60, 0.15);
+
+    /* Level colors */
+    --hsk-basic: #5ec488;      /* green for HSK1-3 */
+    --hsk-advanced: #4a9eff;   /* blue for HSK4-6 */
+    --idiom: #b07cf0;          /* purple for 慣用句 */
+    --colloquial: #f4b942;     /* yellow for 口語 */
+    --slang: #ff6b35;          /* orange for スラング */
+    --malay-col: #2ec4b6;      /* teal for 馬華口語 */
+    --malay-slang: #ff70a6;    /* pink for 馬華スラング */
+
+    --radius: 4px;
+    --radius-lg: 6px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  header {
+    padding: 32px 0 24px;
+    border-bottom: 2px solid var(--text);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo-block {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+  .logo .dot { color: var(--accent); }
+  .logo-cn {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    padding: 4px 8px;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .word-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-bottom: 4px;
+  }
+  .word-count strong {
+    color: var(--accent);
+    font-size: 14px;
+    margin: 0 2px;
+  }
+  .header-actions { display: flex; gap: 6px; }
+
+  button {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  button:hover {
+    border-color: var(--text);
+    background: var(--surface);
+  }
+  button.primary {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: var(--accent);
+  }
+  button.primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+  button.danger-btn {
+    background: transparent;
+    color: var(--danger);
+    border-color: transparent;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  button.danger-btn:hover {
+    background: var(--danger-dim);
+    border-color: var(--danger);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .add-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .add-section::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    right: 24px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .add-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .add-subtitle {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-bottom: 20px;
+  }
+
+  .step { margin-bottom: 18px; }
+  .step-label {
+    font-size: 11px;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    resize: vertical;
+    transition: all 0.15s;
+  }
+  input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--surface-2);
+  }
+  textarea {
+    min-height: 110px;
+    font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .row { display: flex; gap: 8px; align-items: stretch; }
+  .row input[type="text"] { flex: 1; }
+  .hint {
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+  .error-msg {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: var(--danger-dim);
+    border-left: 2px solid var(--danger);
+    display: none;
+  }
+
+  .preview {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-strong);
+    display: none;
+  }
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .preview-title {
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .preview-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    background: var(--bg);
+    cursor: pointer;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: all 0.15s;
+  }
+  .preview-card:hover { border-color: var(--border-strong); }
+  .preview-card.selected {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+  }
+  .checkbox-wrap {
+    display: flex;
+    align-items: center;
+    padding-top: 3px;
+  }
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .preview-body { flex: 1; min-width: 0; }
+  .preview-word {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    letter-spacing: -0.01em;
+    font-family: 'Noto Sans SC', 'Inter', sans-serif;
+  }
+  .preview-pinyin {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+    font-style: italic;
+  }
+  .preview-meaning {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+  }
+  .preview-example {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 2px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .preview-example-pinyin {
+    font-size: 12px;
+    color: var(--text-sub);
+    font-style: italic;
+    margin-bottom: 2px;
+  }
+  .preview-example-ja {
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-bottom: 6px;
+  }
+  .preview-nuance {
+    font-size: 12px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+
+  /* Level badges */
+  .level-badge {
+    display: inline-block;
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid;
+  }
+  .level-HSK1, .level-HSK2, .level-HSK3 {
+    color: var(--hsk-basic);
+    border-color: var(--hsk-basic);
+  }
+  .level-HSK4, .level-HSK5, .level-HSK6 {
+    color: var(--hsk-advanced);
+    border-color: var(--hsk-advanced);
+  }
+  .level-慣用句 {
+    color: var(--idiom);
+    border-color: var(--idiom);
+  }
+  .level-口語 {
+    color: var(--colloquial);
+    border-color: var(--colloquial);
+  }
+  .level-スラング {
+    color: var(--slang);
+    border-color: var(--slang);
+  }
+  .level-馬華口語 {
+    color: var(--malay-col);
+    border-color: var(--malay-col);
+  }
+  .level-馬華スラング {
+    color: var(--malay-slang);
+    border-color: var(--malay-slang);
+  }
+  .level-default {
+    color: var(--text-sub);
+    border-color: var(--border-strong);
+  }
+
+  /* List */
+  .list-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+  .search-box {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+  }
+  .search-box input {
+    padding-left: 36px;
+    font-size: 13px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-mute);
+    pointer-events: none;
+    font-size: 14px;
+  }
+
+  .word-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .word-card:hover { border-color: var(--border-strong); }
+  .word-card.open { border-color: var(--accent); }
+  .word-card.open::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+  .word-card-header {
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 16px;
+  }
+  .word-card-main { flex: 1; min-width: 0; }
+  .word-card-word {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+    word-break: break-word;
+    line-height: 1.2;
+    font-family: 'Noto Sans SC', 'Inter', sans-serif;
+  }
+  .word-card-pinyin {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+    font-style: italic;
+  }
+  .word-card-meaning {
+    font-size: 13px;
+    color: var(--text-sub);
+    word-break: break-word;
+    line-height: 1.5;
+  }
+  .word-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .chevron {
+    color: var(--text-mute);
+    transition: transform 0.2s;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .word-card.open .chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+  .word-card-detail {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+    display: none;
+    animation: slideDown 0.2s ease-out;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .word-card.open .word-card-detail { display: block; }
+
+  .detail-row { margin-top: 16px; }
+  .detail-label {
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .detail-value {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .detail-value.example {
+    font-size: 16px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .detail-value.example-pinyin {
+    color: var(--text-sub);
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .detail-value.example-ja {
+    color: var(--text-mute);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  .detail-value.nuance {
+    color: var(--text-sub);
+    font-size: 13px;
+  }
+  .source-tag {
+    display: inline-block;
+    font-size: 11px;
+    background: var(--bg);
+    color: var(--text-sub);
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border-strong);
+    font-weight: 500;
+  }
+  .detail-actions {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-mute);
+  }
+  .empty-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+    margin-bottom: 6px;
+  }
+  .empty-sub {
+    font-size: 12px;
+    color: var(--text-mute);
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+  }
+  .modal h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .modal p {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .modal-actions .delete-confirm {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+  .modal-actions .delete-confirm:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: var(--bg);
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 200;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 520px) {
+    .container { padding: 0 16px 60px; }
+    header { padding: 24px 0 20px; margin-bottom: 24px; }
+    .logo { font-size: 24px; }
+    .word-count { font-size: 10px; }
+    .add-section { padding: 18px; }
+    .add-title { font-size: 16px; }
+    .word-card-header { padding: 14px 16px; }
+    .word-card-word { font-size: 24px; }
+    .header-actions button {
+      padding: 8px 10px;
+      font-size: 10px;
+    }
+    .row {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-block">
+      <div class="logo">Vocab<span class="dot">.</span>Note</div>
+      <div class="logo-cn">中文</div>
+      <div class="word-count">Total <strong id="word-count">0</strong>words</div>
+    </div>
+    <div class="header-actions">
+      <button onclick="exportData()">Export</button>
+      <button onclick="document.getElementById('import-file').click()">Import</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </header>
+
+  <section class="add-section">
+    <h2 class="add-title">Add new word</h2>
+    <p class="add-subtitle">日本語を入力してAIに調べてもらい、結果をペーストして登録</p>
+
+    <div class="step">
+      <div class="step-label"><span class="step-num">1</span>Search query</div>
+      <div class="row">
+        <input type="text" id="search-word" placeholder="例: しょうがない" autocomplete="off">
+        <button class="primary" onclick="copyPrompt()">プロンプトをコピー</button>
+      </div>
+      <div class="hint">コピーしたプロンプトをClaudeなどのAIに貼り、返ってきたJSONを下に貼り付けてください</div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="step-num">2</span>Paste AI response</div>
+      <textarea id="json-input" placeholder='[&#10;  {&#10;    "word": "怀念",&#10;    "pinyin": "huái niàn",&#10;    "meaning": "懐かしむ",&#10;    ...&#10;  }&#10;]' oninput="parseJsonInput()"></textarea>
+      <div class="error-msg" id="json-error"></div>
+    </div>
+
+    <div class="preview" id="preview">
+      <div class="preview-header">
+        <span class="preview-title">候補を選んで登録</span>
+        <div style="display: flex; gap: 6px;">
+          <button onclick="toggleAll()">全選択切替</button>
+          <button class="primary" onclick="saveSelected()">登録する</button>
+        </div>
+      </div>
+      <div id="preview-list"></div>
+    </div>
+  </section>
+
+  <div class="section-label">My vocabulary</div>
+
+  <div class="list-toolbar">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="filter-input" placeholder="検索..." oninput="renderList()">
+    </div>
+  </div>
+
+  <div id="word-list"></div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">削除しますか？</h3>
+    <p id="modal-message"></p>
+    <div class="modal-actions">
+      <button onclick="closeModal()">キャンセル</button>
+      <button class="delete-confirm" id="modal-confirm">削除する</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const STORAGE_KEY = 'vocabnote_cn_words_v1';
+  let words = loadWords();
+  let parsedCandidates = [];
+  let selectedIndices = new Set();
+
+  function buildPrompt(jp) {
+    return `「${jp}」を意味する中国語（簡体字）の表現を6〜10個教えてください。
+HSKレベルの基本語彙から、慣用句（成语）、口語、ネットスラングまで幅広く挙げてください。
+学習者向けに、自然な使い分けがわかるよう選んでください。
+
+口語・スラング表現は、中国本土のものとマレーシア華語（馬華）のものを両方バランスよく含めてください。
+マレーシア華語特有の表現（語尾の lah / lor / mah、マレー語混じり、福建語由来の語彙など）も積極的に挙げてください。
+
+出力は必ず以下のJSON形式のみで、実際の中国語・ピンイン・例文・解説を埋めて返してください。
+ピンインは必ず声調記号付き（例: huái niàn）で書いてください。数字表記（huai2 nian4）は使わないでください。
+マレー語や英語が混じる馬華表現の場合、ピンインは中国語部分のみ声調記号付きで、それ以外はそのまま記載してください。
+前後に説明文やコードブロック記号（\`\`\`）は付けないでください。
+
+[
+  {
+    "word": "(簡体字の単語または熟語、馬華の場合はそのままの表記)",
+    "pinyin": "(声調記号付きピンイン)",
+    "meaning": "(日本語の意味)",
+    "example": "(例文)",
+    "example_pinyin": "(例文の声調記号付きピンイン)",
+    "example_ja": "(例文の日本語訳)",
+    "nuance": "(使う場面やニュアンス、他の表現との違い。馬華の場合は語源や使用地域も)",
+    "level": "(HSK1 / HSK2 / HSK3 / HSK4 / HSK5 / HSK6 / 慣用句 / 口語 / スラング / 馬華口語 / 馬華スラング のいずれか)"
+  }
+]
+
+候補は6〜10個。中国本土の標準表現・慣用句・口語スラングに加えて、マレーシア華語の口語やスラングも必ず2〜3個は含めてください。`;
+  }
+
+  function copyPrompt() {
+    const jp = document.getElementById('search-word').value.trim();
+    if (!jp) {
+      showToast('日本語を入力してください');
+      document.getElementById('search-word').focus();
+      return;
+    }
+    const prompt = buildPrompt(jp);
+    navigator.clipboard.writeText(prompt).then(() => {
+      showToast('プロンプトをコピーしました');
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = prompt;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('プロンプトをコピーしました');
+    });
+  }
+
+  function getLevelClass(level) {
+    if (!level) return 'level-default';
+    const valid = ['HSK1','HSK2','HSK3','HSK4','HSK5','HSK6','慣用句','口語','スラング','馬華口語','馬華スラング'];
+    return valid.includes(level) ? `level-${level}` : 'level-default';
+  }
+
+  function parseJsonInput() {
+    const raw = document.getElementById('json-input').value.trim();
+    const errEl = document.getElementById('json-error');
+    const preview = document.getElementById('preview');
+
+    if (!raw) {
+      errEl.style.display = 'none';
+      preview.style.display = 'none';
+      parsedCandidates = [];
+      return;
+    }
+
+    let cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+
+    try {
+      const parsed = JSON.parse(cleaned);
+      if (!Array.isArray(parsed)) throw new Error('配列形式ではありません');
+      const valid = parsed.filter(item =>
+        item && typeof item === 'object' && item.word && item.meaning
+      );
+      if (valid.length === 0) throw new Error('有効な単語データが見つかりません');
+      parsedCandidates = valid;
+      selectedIndices = new Set(valid.map((_, i) => i));
+      errEl.style.display = 'none';
+      renderPreview();
+      preview.style.display = 'block';
+    } catch (e) {
+      errEl.textContent = 'JSON解析エラー: ' + e.message + '。AI出力をそのまま貼り付けてください。';
+      errEl.style.display = 'block';
+      preview.style.display = 'none';
+      parsedCandidates = [];
+    }
+  }
+
+  function renderPreview() {
+    const list = document.getElementById('preview-list');
+    list.innerHTML = parsedCandidates.map((c, i) => {
+      const isSelected = selectedIndices.has(i);
+      const level = c.level || '';
+      const levelClass = getLevelClass(level);
+      return `
+        <div class="preview-card ${isSelected ? 'selected' : ''}" onclick="toggleCandidate(${i})">
+          <div class="checkbox-wrap">
+            <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleCandidate(${i})">
+          </div>
+          <div class="preview-body">
+            <div class="preview-word">
+              ${escapeHtml(c.word)}
+              ${level ? `<span class="level-badge ${levelClass}">${escapeHtml(level)}</span>` : ''}
+            </div>
+            ${c.pinyin ? `<div class="preview-pinyin">${escapeHtml(c.pinyin)}</div>` : ''}
+            <div class="preview-meaning">${escapeHtml(c.meaning || '')}</div>
+            ${c.example ? `<div class="preview-example">${escapeHtml(c.example)}</div>` : ''}
+            ${c.example_pinyin ? `<div class="preview-example-pinyin">${escapeHtml(c.example_pinyin)}</div>` : ''}
+            ${c.example_ja ? `<div class="preview-example-ja">${escapeHtml(c.example_ja)}</div>` : ''}
+            ${c.nuance ? `<div class="preview-nuance">${escapeHtml(c.nuance)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleCandidate(i) {
+    if (selectedIndices.has(i)) selectedIndices.delete(i);
+    else selectedIndices.add(i);
+    renderPreview();
+  }
+
+  function toggleAll() {
+    if (selectedIndices.size === parsedCandidates.length) selectedIndices.clear();
+    else selectedIndices = new Set(parsedCandidates.map((_, i) => i));
+    renderPreview();
+  }
+
+  function saveSelected() {
+    if (selectedIndices.size === 0) {
+      showToast('候補を選択してください');
+      return;
+    }
+    const sourceJa = document.getElementById('search-word').value.trim();
+    const now = Date.now();
+    let added = 0;
+    selectedIndices.forEach(i => {
+      const c = parsedCandidates[i];
+      words.unshift({
+        id: now + '_' + Math.random().toString(36).slice(2, 8),
+        word: c.word,
+        pinyin: c.pinyin || '',
+        meaning: c.meaning || '',
+        example: c.example || '',
+        example_pinyin: c.example_pinyin || '',
+        example_ja: c.example_ja || '',
+        nuance: c.nuance || '',
+        level: c.level || '',
+        source_ja: sourceJa,
+        created_at: now
+      });
+      added++;
+    });
+    saveWords();
+
+    document.getElementById('json-input').value = '';
+    document.getElementById('search-word').value = '';
+    document.getElementById('preview').style.display = 'none';
+    parsedCandidates = [];
+    selectedIndices.clear();
+
+    renderList();
+    updateCount();
+    showToast(`${added}件 登録完了`);
+  }
+
+  function renderList() {
+    const filter = document.getElementById('filter-input').value.trim().toLowerCase();
+    const filtered = filter
+      ? words.filter(w =>
+          w.word.toLowerCase().includes(filter) ||
+          (w.pinyin || '').toLowerCase().includes(filter) ||
+          w.meaning.toLowerCase().includes(filter) ||
+          (w.source_ja || '').toLowerCase().includes(filter)
+        )
+      : words;
+
+    const list = document.getElementById('word-list');
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <div class="empty-title">${words.length === 0 ? 'No words yet' : 'No results'}</div>
+          <div class="empty-sub">${words.length === 0 ? '上のフォームから最初の単語を追加してみよう' : '別のキーワードで検索してください'}</div>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = filtered.map(w => {
+      const level = w.level || '';
+      const levelClass = getLevelClass(level);
+      return `
+        <div class="word-card" data-id="${w.id}">
+          <div class="word-card-header" onclick="toggleCard('${w.id}')">
+            <div class="word-card-main">
+              <div class="word-card-word">
+                ${escapeHtml(w.word)}
+                ${level ? `<span class="level-badge ${levelClass}">${escapeHtml(level)}</span>` : ''}
+              </div>
+              ${w.pinyin ? `<div class="word-card-pinyin">${escapeHtml(w.pinyin)}</div>` : ''}
+              <div class="word-card-meaning">${escapeHtml(w.meaning)}</div>
+            </div>
+            <div class="word-card-meta">
+              <span class="chevron">▼</span>
+            </div>
+          </div>
+          <div class="word-card-detail">
+            ${w.example ? `
+              <div class="detail-row">
+                <div class="detail-label">Example</div>
+                <div class="detail-value example">${escapeHtml(w.example)}</div>
+                ${w.example_pinyin ? `<div class="detail-value example-pinyin">${escapeHtml(w.example_pinyin)}</div>` : ''}
+                ${w.example_ja ? `<div class="detail-value example-ja">${escapeHtml(w.example_ja)}</div>` : ''}
+              </div>
+            ` : ''}
+            ${w.nuance ? `
+              <div class="detail-row">
+                <div class="detail-label">Nuance</div>
+                <div class="detail-value nuance">${escapeHtml(w.nuance)}</div>
+              </div>
+            ` : ''}
+            ${w.source_ja ? `
+              <div class="detail-row">
+                <div class="detail-label">Source</div>
+                <span class="source-tag">${escapeHtml(w.source_ja)}</span>
+              </div>
+            ` : ''}
+            <div class="detail-actions">
+              <button class="danger-btn" onclick="confirmDelete('${w.id}', event)">削除</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleCard(id) {
+    const card = document.querySelector(`.word-card[data-id="${id}"]`);
+    if (card) card.classList.toggle('open');
+  }
+
+  function confirmDelete(id, event) {
+    if (event) event.stopPropagation();
+    const w = words.find(x => x.id === id);
+    if (!w) return;
+    document.getElementById('modal-title').textContent = '削除しますか？';
+    document.getElementById('modal-message').textContent = `「${w.word}」を削除します。この操作は取り消せません。`;
+    document.getElementById('modal').classList.add('show');
+    document.getElementById('modal-confirm').onclick = () => {
+      words = words.filter(x => x.id !== id);
+      saveWords();
+      renderList();
+      updateCount();
+      closeModal();
+      showToast('削除しました');
+    };
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+
+  document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target.id === 'modal') closeModal();
+  });
+
+  function loadWords() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  }
+  function saveWords() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(words));
+  }
+  function updateCount() {
+    document.getElementById('word-count').textContent = words.length;
+  }
+
+  function exportData() {
+    if (words.length === 0) {
+      showToast('エクスポートする単語がありません');
+      return;
+    }
+    const blob = new Blob([JSON.stringify(words, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `vocabnote_cn_${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('エクスポートしました');
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error('配列形式ではありません');
+        const existingIds = new Set(words.map(w => w.id));
+        const newOnes = imported.filter(w => w && w.word && !existingIds.has(w.id));
+        words = [...newOnes, ...words];
+        saveWords();
+        renderList();
+        updateCount();
+        showToast(`${newOnes.length}件をインポートしました`);
+      } catch (err) {
+        showToast('インポート失敗: ' + err.message);
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  renderList();
+  updateCount();
+</script>
+
+</body>
+</html>
